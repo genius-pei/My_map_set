@@ -25,6 +25,54 @@ struct RBTreeNode
 	}
 
 };
+template<class T,class Ref,class Ptr>
+struct TreeIterator
+{
+	typedef	RBTreeNode<T> Node;
+	typedef TreeIterator<T, Ref, Ptr> Self;
+	Node* _node;
+
+	TreeIterator(Node* node)
+		:_node(node)
+	{
+
+	}
+	Ref operator*()
+	{
+		return _node->_data;
+	}
+	Ptr operator->()
+	{
+		return  &_node->_data;
+	}
+
+	Self& operator++()
+	{
+		//当前右孩子不为空，下一个为柚子树中序最左节点
+		if (_node->_right)
+		{
+			Node* min=_node->_right
+				while (min->_left)
+				{
+					min = min->_left;
+				}
+			_node = min;
+		}
+		else	// 当前节点右为空，下一个孩子是父亲左的那个祖先节点
+		{
+			Node* cur = _node;
+			Node* parent = cur->_parent;
+			while (parent && cur == parent->_right)
+			{
+				cur = parent;
+				parent = parent->_parent;
+			}
+			_node = parent;
+		}
+		return *this;
+	}
+
+};
 
 
 template<class K, class T,class KeyOfT>
