@@ -14,6 +14,15 @@ namespace yiming
 		};
 
 	public:
+		typedef typename RBTree<K, K, SetOfT>::Iterator  iterator;
+		iterator begin()
+		{
+			return _t.Begin();
+		}
+		iterator end()
+		{
+			return _t.End();
+		}
 		bool insert(const K& k)
 		{
 			return _t.Insert(k);
