@@ -51,8 +51,8 @@ struct TreeIterator
 		//当前右孩子不为空，下一个为柚子树中序最左节点
 		if (_node->_right)
 		{
-			Node* min=_node->_right
-				while (min->_left)
+			Node* min = _node->_right;
+				while(min->_left)
 				{
 					min = min->_left;
 				}
@@ -71,6 +71,14 @@ struct TreeIterator
 		}
 		return *this;
 	}
+	bool operator!=(const Self& s)const
+	{
+		return _node != s._node;
+	}
+	bool operator==(const Self& s)const
+	{
+		return _node == s._node;
+	}
 
 };
 
@@ -80,6 +88,21 @@ class RBTree
 {
 	typedef RBTreeNode<T> Node;
 public:
+	typedef TreeIterator<T,T&,T*> Iterator;
+	Iterator Begin()
+	{
+		Node* min = _root;
+		while (min && min->_left)
+		{
+			min = min->_left;
+		}
+		return Iterator(min);
+	}
+	Iterator End()
+	{
+		return Iterator(nullptr);
+	}
+
 	bool Insert(const T& data)
 	{
 
