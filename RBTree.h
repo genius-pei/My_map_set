@@ -71,6 +71,25 @@ struct TreeIterator
 		}
 		return *this;
 	}
+	Self& operator--()
+	{
+		if (_node->_left)
+		{
+			Node* max = _node->_left;
+			while (max->_right)
+			{
+				max = max->_right;
+			}
+			_node = max;
+		}
+		else
+		{
+			
+		}
+
+		return *this;
+	}
+
 	bool operator!=(const Self& s)const
 	{
 		return _node != s._node;
@@ -88,7 +107,7 @@ class RBTree
 {
 	typedef RBTreeNode<T> Node;
 public:
-	typedef TreeIterator<T,T&,T*> Iterator;
+	typedef TreeIterator<T, T&, T*> Iterator;
 	Iterator Begin()
 	{
 		Node* min = _root;
@@ -103,7 +122,7 @@ public:
 		return Iterator(nullptr);
 	}
 
-	bool Insert(const T& data)
+	pair<Iterator, bool> Insert(const T& data)
 	{
 
 		if (_root == nullptr)//将根节点初始化成为黑色
@@ -111,7 +130,7 @@ public:
 			_root = new Node(data);
 			_root->_col = BLACK;
 
-			return true;
+			return { Iterator(_root),true };
 		}
 		KeyOfT kot;
 		Node* parent = nullptr;
@@ -123,18 +142,19 @@ public:
 				parent = cur;
 				cur = cur->_right;
 			}
-			else if (kot(cur->_data) >kot(data))
+			else if (kot(cur->_data) > kot(data))
 			{
 				parent = cur;
 				cur = cur->_left;
 			}
 			else
 			{
-				return false;
+				return { Iterator(cur),false };//插入失败则返回当前节点
 			}
 		}
 
 		cur = new Node(data);
+		Node* newnode = cur;//保存插入的节点以便于插入后返回时使用
 		cur->_col = RED;
 		if (kot(parent->_data) < kot(data))
 		{
@@ -236,8 +256,10 @@ public:
 		}
 
 		_root->_col = BLACK;
-		return true;
+		return {Iterator(newnode),true};
 	}
+
+
 	void InOrder()
 	{
 		_InOrder(_root);
@@ -371,7 +393,7 @@ private:
 
 		if (cur->_col == RED && cur->_parent && cur->_parent->_col == RED)
 		{
-			cout << cur->_kv.first << "->" << "连续的红色节点" << endl;
+			cout << cur->kot(cur->_data) << "->" << "连续的红色节点" << endl;
 			return false;
 		}
 
@@ -450,5 +472,5 @@ private:
 	}
 
 	Node* _root = nullptr;
-
 };
+	
