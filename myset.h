@@ -1,7 +1,9 @@
 #pragma once
 #include"RBTree.h"
+
 namespace yiming
 {
+	
 	template<class K>
 	class set
 	{
@@ -23,11 +25,11 @@ namespace yiming
 		{
 			return _t.End();
 		}
-		bool insert(const K& k)
+		pair<iterator,bool> insert(const K& k)
 		{
 			return _t.Insert(k);
 		}
 	private:
-		RBTree<K, K,SetOfT> _t;
+		RBTree<K,  K,SetOfT> _t;
 	};
 }
