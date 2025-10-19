@@ -7,7 +7,7 @@ namespace yiming
 	template<class K>
 	class set
 	{
-		struct SetOfT
+		struct SetKeyOfT
 		{
 			const K& operator()(const K& key)
 			{
@@ -16,7 +16,7 @@ namespace yiming
 		};
 
 	public:
-		typedef typename RBTree<K, K, SetOfT>::Iterator  iterator;
+		typedef typename RBTree<K, K, SetKeyOfT>::Iterator  iterator;
 		iterator begin()
 		{
 			return _t.Begin();
@@ -30,6 +30,6 @@ namespace yiming
 			return _t.Insert(k);
 		}
 	private:
-		RBTree<K,  K,SetOfT> _t;
+		RBTree<K,K,SetKeyOfT> _t;
 	};
 }
